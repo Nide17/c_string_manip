@@ -60,20 +60,20 @@ bool is_prefix(const char *prefix, const char *str)
  * Parameters:
  *   prefix     The prefix of the string
  *   str        The actual string
- *   expected   The expected bool result of the function
+ *   expected   The expected int result of the function
  *
  * Returns:
  *   true if the test passes, false otherwise
  */
-bool test_is_prefix_once(const char *prefix, const char *str, bool expected)
+int test_is_prefix_once(const char *prefix, const char *str, bool expected)
 {
     if (is_prefix(prefix, str) != expected)
     {
         printf("\nTest error: Checking the prefix '%s' in '%s', Result: '%d', Expected: '%d'\n", prefix, str, is_prefix(prefix, str), expected);
-        return false;
+        return 0;
     }
     else
-        return true;
+        return 1;
 }
 
 /*
@@ -82,39 +82,39 @@ bool test_is_prefix_once(const char *prefix, const char *str, bool expected)
  * Returns:
  *   true if all tests succeed, false otherwise.
  */
-bool test_is_prefix()
+int test_is_prefix()
 {
-    bool result = true;
+    int result = 1;
 
     if (!test_is_prefix_once("C", "Carnegie Mellon", true))
-        result = false;
+        result = 0;
 
     if (!test_is_prefix_once("Carnegie", "Carnegie Mellon", true))
-        result = false;
+        result = 0;
 
     if (!test_is_prefix_once("Carnegie Mellon", "Carnegie Mellon", true))
-        result = false;
+        result = 0;
 
     if (!test_is_prefix_once("Carnegie Mellon University", "Carnegie Mellon", false))
-        result = false;
+        result = 0;
 
     if (!test_is_prefix_once("Cab", "Carnegie Mellon", false))
-        result = false;
+        result = 0;
 
     if (!test_is_prefix_once("car", "Carnegie Mellon", false))
-        result = false;
+        result = 0;
 
     if (!test_is_prefix_once("0", "0Carnegie", true))
-        result = false;
+        result = 0;
 
     if (!test_is_prefix_once("", "Carnegie", true))
-        result = false;
+        result = 0;
 
     if (!test_is_prefix_once(" ", "Carnegie", false))
-        result = false;
+        result = 0;
 
     if (!test_is_prefix_once("", " Carnegie", true))
-        result = false;
+        result = 0;
 
     return result;
 }
@@ -173,7 +173,7 @@ void reverse_in_place(char *str)
  * Returns:
  *   true if the test passes, false otherwise.
  */
-bool test_reverse_in_place_once(char *str, char *expected)
+int test_reverse_in_place_once(char *str, char *expected)
 {
     char temp[256];
 
@@ -184,11 +184,11 @@ bool test_reverse_in_place_once(char *str, char *expected)
     if (strcmp(temp, expected) != 0)
     {
         printf("Test error: Reversing '%s', Result: '%s', Expected: '%s'\n", str, temp, expected);
-        return false;
+        return 0;
     }
 
     else
-        return true;
+        return 1;
 }
 
 /*
@@ -197,30 +197,30 @@ bool test_reverse_in_place_once(char *str, char *expected)
  * Returns:
  *   true if all tests succeed, false otherwise.
  */
-bool test_reverse_in_place()
+int test_reverse_in_place()
 {
-    bool result = true;
+    int result = 1;
 
     if (!test_reverse_in_place_once("Carnegie Mellon", "nollem eigenrac"))
-        result = false;
+        result = 0;
 
     if (!test_reverse_in_place_once("Four", "ruof"))
-        result = false;
+        result = 0;
 
     if (!test_reverse_in_place_once("One", "eno"))
-        result = false;
+        result = 0;
 
     if (!test_reverse_in_place_once(" ", " "))
-        result = false;
+        result = 0;
 
     if (!test_reverse_in_place_once("", ""))
-        result = false;
+        result = 0;
 
     if (!test_reverse_in_place_once("15", "51"))
-        result = false;
+        result = 0;
 
     if (!test_reverse_in_place_once("15 fifteen quinze", "ezniuq neetfif 51"))
-        result = false;
+        result = 0;
 
     return result;
 }
@@ -283,7 +283,7 @@ void reverse_by_word(char *str)
  * Returns:
  *   true if the test passes, false otherwise.
  */
-bool test_reverse_by_word_once(char *str, char *expected)
+int test_reverse_by_word_once(char *str, char *expected)
 {
     char temp[512];
 
@@ -294,10 +294,10 @@ bool test_reverse_by_word_once(char *str, char *expected)
     if (strcmp(temp, expected) != 0)
     {
         printf("\nTest error: Reversing '%s', Result: '%s', Expected: '%s'\n", str, temp, expected);
-        return false;
+        return 0;
     }
     else
-        return true;
+        return 1;
 }
 
 /*
@@ -306,26 +306,26 @@ bool test_reverse_by_word_once(char *str, char *expected)
  * Returns:
  *   true if all tests succeed, false otherwise.
  */
-bool test_reverse_by_word()
+int test_reverse_by_word()
 {
-    bool success = true;
+    int result = 1;
 
     if (!test_reverse_by_word_once("Carnegie Mellon", "eigenraC nolleM"))
-        success = false;
+        result = 0;
 
     if (!test_reverse_by_word_once("    Carnegie  Mellon", "    eigenraC  nolleM"))
-        success = false;
+        result = 0;
 
     if (!test_reverse_by_word_once("My heart is in  the work", "yM traeh si ni  eht krow"))
-        success = false;
+        result = 0;
 
     if (!test_reverse_by_word_once("Four", "ruoF"))
-        success = false;
+        result = 0;
 
     if (!test_reverse_by_word_once(" One", " enO"))
-        success = false;
+        result = 0;
 
-    return success;
+    return result;
 }
 
 /*
@@ -454,7 +454,7 @@ int remove_last_substr(char *str, const char *substr)
  * Returns:
  *   true if the test passes, false otherwise.
  */
-bool test_remove_last_substr_once(char *str, const char *sub_str, char *expected_str, int expected_position)
+int test_remove_last_substr_once(char *str, const char *sub_str, char *expected_str, int expected_position)
 {
     char temp[512];
     strcpy(temp, str);
@@ -465,10 +465,10 @@ bool test_remove_last_substr_once(char *str, const char *sub_str, char *expected
     {
         printf("\nTest error: removing '%s', from '%s', gives '%s', expected '%s' to be removed at position '%d' instead removed at '%d\n",
                sub_str, str, temp, expected_str, expected_position, position);
-        return false;
+        return 0;
     }
     else
-        return true;
+        return 1;
 }
 
 /*
@@ -477,40 +477,40 @@ bool test_remove_last_substr_once(char *str, const char *sub_str, char *expected
  * Returns:
  *   true if all tests succeed, false otherwise.
  */
-bool test_remove_last_substr()
+int test_remove_last_substr()
 {
-    bool success = true;
+    int result = 1;
     if (!test_remove_last_substr_once("Carnegie_Mellon", "Carnegie", "_Mellon", 0))
-        success = false;
+        result = 0;
 
     if (!test_remove_last_substr_once("Carnegie Mellon", "Carnegie", " Mellon", 0))
-        success = false;
+        result = 0;
 
     if (!test_remove_last_substr_once("one two one three", "hr", "one two one tee", 13))
-        success = false;
+        result = 0;
 
     if (!test_remove_last_substr_once("Bananas", "a", "Banans", 5))
-        success = false;
+        result = 0;
 
     if (!test_remove_last_substr_once("Bananas", "nan", "Baas", 2))
-        success = false;
+        result = 0;
 
     if (!test_remove_last_substr_once("one two one three", "one ", "one two three", 8))
-        success = false;
+        result = 0;
 
     if (!test_remove_last_substr_once("Carnegie Mellon", "Kiltie", "Carnegie Mellon", -1))
-        success = false;
+        result = 0;
 
     if (!test_remove_last_substr_once("Carnegie Mellon", "Carnegie Mellon University", "Carnegie Mellon", -1))
-        success = false;
+        result = 0;
 
     if (!test_remove_last_substr_once("Carnegie Mellon", "", "Carnegie Mellon", 14))
-        success = false;
+        result = 0;
 
     if (!test_remove_last_substr_once("", "Carnegie", "", -1))
-        success = false;
+        result = 0;
 
-    return success;
+    return result;
 }
 
 /*
@@ -567,7 +567,7 @@ void strip_chars(char *str, const char *remove_chars)
  * Returns:
  *   true if the test passes, false otherwise.
  */
-bool test_strip_chars_once(char *str, char *chars, char *expected)
+int test_strip_chars_once(char *str, char *chars, char *expected)
 {
     char temp[256];
 
@@ -578,11 +578,11 @@ bool test_strip_chars_once(char *str, char *chars, char *expected)
     if (strcmp(temp, expected) != 0)
     {
         printf("Test error: Striping characters in '%s', Result: '%s', Expected: '%s'\n", str, temp, expected);
-        return false;
+        return 0;
     }
 
     else
-        return true;
+        return 1;
 }
 
 /*
@@ -591,39 +591,39 @@ bool test_strip_chars_once(char *str, char *chars, char *expected)
  * Returns:
  *   true if all tests succeed, false otherwise.
  */
-bool test_strip_chars()
+int test_strip_chars()
 {
-    bool result = true;
+    int result = 1;
 
     if (!test_strip_chars_once("Carnegie Mellon", "l ", "CarnegieMeon"))
-        result = false;
+        result = 0;
 
     if (!test_strip_chars_once("Carnegie Mellon", "el ", "CarngiMon"))
-        result = false;
+        result = 0;
 
     if (!test_strip_chars_once("Carnegie Mellon", "", "Carnegie Mellon"))
-        result = false;
+        result = 0;
 
     if (!test_strip_chars_once("one two three", "thre", "on wo "))
-        result = false;
+        result = 0;
 
     if (!test_strip_chars_once("Bananas", "a", "Bnns"))
-        result = false;
+        result = 0;
 
     if (!test_strip_chars_once("Bananas", "Bnas", ""))
-        result = false;
+        result = 0;
 
     if (!test_strip_chars_once("", "", ""))
-        result = false;
+        result = 0;
 
     if (!test_strip_chars_once(" ", "", " "))
-        result = false;
+        result = 0;
 
     if (!test_strip_chars_once("", " ", ""))
-        result = false;
+        result = 0;
 
     if (!test_strip_chars_once("15 fifteen quinze", "51", " fifteen quinze"))
-        result = false;
+        result = 0;
 
     return result;
 }
