@@ -135,9 +135,10 @@ These functions may be very important in C programming language because they can
 
 __GETTING STARTED__
 
-* Clone this repository to get the guess-number.c program.
+* Clone this repository to get the c_string_manip.c program.
 * In the terminal, navigate inside the program's directory.
-* Compile the program by running the command: gcc -Wall -Werror  guess-number.c -o guess-number
+* Compile the program by running the command: gcc -Wall -Werror  c_string_manip.c -o c_string_manip
+* Run the program using the command: ./c_string_manip
   
 __TESTING__
 
