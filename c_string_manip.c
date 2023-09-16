@@ -39,9 +39,7 @@ bool is_prefix(const char *prefix, const char *str)
     {
         // WHEN THE CHARACTERS DO NOT MATCH, RETURN false
         if (*prefix != *str)
-        {
             return false;
-        }
 
         // ELSE MOVE POINTERS
         prefix++;
