@@ -1,8 +1,3 @@
-#include <stdio.h>
-#include <stdbool.h>
-#include <ctype.h>
-#include <string.h>
-
 /*
  * c_string_manip.c
  *
@@ -10,11 +5,27 @@
  *
  * 1. bool is_prefix(const char *prefix, const char *str)
  * 2. void reverse_in_place(char *str)
- * 3. bool is_prefix(const char *prefix, const char *str)
+ * 3. void reverse_by_word(char *str)
  * 4. int remove_last_substr(char *str, const char *substr)
- * 5. int first_word(const char *input, char *word, int word_len)
+ * 5. void strip_chars(char *str, const char *remove_chars)
  *
  * Author: Niyomwungeri Parmenide ISHIMWE <parmenin@andrew.cmu.edu>
+ */
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <ctype.h>
+#include <string.h>
+
+/*
+ * Determine if one string is a prefix of another string.
+ *
+ * Parameters:
+ * prefix:  A null-terminated string to represent string's prefix.
+ * str:     Actual string, that is a null-terminated string.
+ *
+ * Returns:
+ * true if str begins with prefix, and false otherwise.
  */
 
 bool is_prefix(const char *prefix, const char *str)
@@ -27,7 +38,8 @@ bool is_prefix(const char *prefix, const char *str)
     while (*str != '\0' && *prefix != '\0')
     {
         // WHEN THE CHARACTERS DO NOT MATCH, RETURN false
-        if (*prefix != *str) {
+        if (*prefix != *str)
+        {
             return false;
         }
 
@@ -37,13 +49,24 @@ bool is_prefix(const char *prefix, const char *str)
     }
 
     // CHECK IF STR FINISH BEFORE PREFIX - PREF LONGER THAN STR
-    if(*str == '\0' && *prefix != '\0')
+    if (*str == '\0' && *prefix != '\0')
         return false;
 
     // IF PREFIX FINISHED BEFORE STRING
     return true;
 }
 
+/*
+ * Tests the is_prefix function, for one test case
+ *
+ * Parameters:
+ *   prefix     The prefix of the string
+ *   str        The actual string
+ *   expected   The expected bool result of the function
+ *
+ * Returns:
+ *   true if the test passes, false otherwise
+ */
 bool test_is_prefix_once(const char *prefix, const char *str, bool expected)
 {
     if (is_prefix(prefix, str) != expected)
@@ -55,6 +78,12 @@ bool test_is_prefix_once(const char *prefix, const char *str, bool expected)
         return true;
 }
 
+/*
+ * Performs unit tests of the is_prefix function by running test_is_prefix_once on each test case.
+ *
+ * Returns:
+ *   true if all tests succeed, false otherwise.
+ */
 bool test_is_prefix()
 {
     bool result = true;
@@ -92,6 +121,15 @@ bool test_is_prefix()
     return result;
 }
 
+/*
+ * Reverses a null-terminated string in place, converting it to all lower case in the process
+ *
+ * Parameters:
+ *   str   A null terminated string to be reversed.
+ *
+ * Returns:
+ *   None
+ */
 void reverse_in_place(char *str)
 {
     // POINTER THAT POINTS TO THE FIRST CHAR
@@ -108,7 +146,7 @@ void reverse_in_place(char *str)
     // USING TEMP, SWAP CHARS FROM EXTREMITIES
     while (ptr_end > ptr_start)
     {
-        // SWAPPING CHARS
+        // SWAPPING CHARACTERS UNTIL THE MIDDLE
         char temp = *ptr_start;
         *ptr_start = *ptr_end;
         *ptr_end = temp;
@@ -127,11 +165,21 @@ void reverse_in_place(char *str)
     }
 }
 
+/*
+ * Tests the reverse_in_place function, for one test case
+ *
+ * Parameters:
+ *   str        The string to pass to reverse_in_place function to be reversed.
+ *   expected   The expected char type result of the reverse_in_place function.
+ *
+ * Returns:
+ *   true if the test passes, false otherwise.
+ */
 bool test_reverse_in_place_once(char *str, char *expected)
 {
     char temp[256];
 
-    strcpy(temp, str);      // SAVING str TO temp
+    strcpy(temp, str);      // COPYING str TO THE temp
     reverse_in_place(temp); // REVERSING temp IN PLACE
 
     // CHECKING IF THE REVERSE IS CORRECT
@@ -145,6 +193,12 @@ bool test_reverse_in_place_once(char *str, char *expected)
         return true;
 }
 
+/*
+ * Performs unit tests of the reverse_in_place function by running test_reverse_in_place_once on each test case.
+ *
+ * Returns:
+ *   true if all tests succeed, false otherwise.
+ */
 bool test_reverse_in_place()
 {
     bool result = true;
@@ -173,6 +227,18 @@ bool test_reverse_in_place()
     return result;
 }
 
+/*
+ * An implementation of the reverse_by_word function
+ *
+ * Individually reverses each word of a null-terminated string in place.
+ * Whitespace characters (as identified by the C isspace() function) are passed through unchanged.
+ *
+ * Parameters:
+ *   str   A null terminated string to be reversed word by word.
+ *
+ * Returns:
+ *   None
+ */
 void reverse_by_word(char *str)
 {
     // POINTER THAT POINTS TO THE FIRST CHAR
@@ -191,7 +257,7 @@ void reverse_by_word(char *str)
         while (*end != '\0' && !isspace(*end))
             end++;
 
-        // REVERSING THE WORD
+        // REVERSING THE WORD IN PLACE
         char *word_start = start;
         char *word_end = end - 1;
 
@@ -209,23 +275,39 @@ void reverse_by_word(char *str)
     }
 }
 
-bool test_reverse_by_word_once(char *input, char *expected)
+/*
+ * Tests the reverse_by_word function, for one test case
+ *
+ * Parameters:
+ *   str        The string to pass to reverse_by_word function to be reversed.
+ *   expected   The expected char type result of the reverse_by_word function.
+ *
+ * Returns:
+ *   true if the test passes, false otherwise.
+ */
+bool test_reverse_by_word_once(char *str, char *expected)
 {
     char temp[512];
 
-    strcpy(temp, input);
+    strcpy(temp, str);
 
     reverse_by_word(temp);
 
     if (strcmp(temp, expected) != 0)
     {
-        printf("\nTest error: Reversing '%s', Result: '%s', Expected: '%s'\n", input, temp, expected);
+        printf("\nTest error: Reversing '%s', Result: '%s', Expected: '%s'\n", str, temp, expected);
         return false;
     }
     else
         return true;
 }
 
+/*
+ * Performs unit tests of the reverse_by_word function by running test_reverse_by_word_once on each test case.
+ *
+ * Returns:
+ *   true if all tests succeed, false otherwise.
+ */
 bool test_reverse_by_word()
 {
     bool success = true;
@@ -248,47 +330,55 @@ bool test_reverse_by_word()
     return success;
 }
 
+/*
+ * Removes the last occurrence of substr from str, modifying the result in place.
+ *
+ * Parameters:
+ *   str        A null terminated string for which a sub-string will be removed.
+ *   substr     A null terminated string to remove from the string.
+ *
+ * Returns:
+ *    int that represnts the position where the sub-string was removed.
+ */
 int remove_last_substr(char *str, const char *substr)
 {
-    char *str_ptr = str;          // POINTING TO THE FIRST CHAR OF STR
-    const char *sub_ptr = substr; // POINTING TO THE FIRST CHAR OF SUBSTR
+    char *first_str_char = str;          // KEEPING THE FIRST CHAR OF STR ADRESS
+    const char *first_sub_char = substr; // KEEPING THE FIRST CHAR OF SUBSTR ADRESS
 
-    char *char_one_str = str;          // KEEPING THE FIRST CHAR OF STR ADRESS
-    const char *char_one_sub = substr; // KEEPING THE FIRST CHAR OF SUBSTR ADRESS
-    int position = -1;                 // POSITION OF THE LAST CHAR OF SUBSTR IN STR
-    int sub_len = 0;                   // LENGTH OF SUBSTR
+    int position = -1; // POSITION OF THE LAST CHAR OF SUBSTR IN STR
+    int sub_len = 0;   // LENGTH OF SUBSTR
 
     // MOVING THE POINTER TO THE LAST CHAR OF STR
-    while (*str_ptr != '\0')
-        str_ptr++;
+    while (*str != '\0')
+        str++;
 
     // POINTING IT BACK TO THE LAST CHAR FROM '\0'
-    str_ptr--;
+    str--;
 
-    position = str_ptr - char_one_str; // POSITION OF THE LAST CHAR OF STR IN STR
+    position = str - first_str_char; // POSITION OF THE LAST CHAR OF STR IN STR
 
     // MOVING THE POINTER TO THE LAST CHAR OF SUB AND GETTING THE LENGTH OF SUBSTR
-    while (*sub_ptr != '\0')
+    while (*substr != '\0')
     {
-        sub_ptr++;
+        substr++;
         sub_len++;
     }
 
     // POINTING IT BACK TO THE LAST CHAR FROM '\0'
-    sub_ptr--;
+    substr--;
 
     // IF SUB IS EMPTY STRING
-    if(*sub_ptr == '\0')
+    if (*substr == '\0')
         return position;
 
     // IF STR IS EMPTY STRING
-    if(*str_ptr == '\0')
+    if (*str == '\0')
         return -1;
 
     // FIND THE LAST SUB STR CHAR'S POSITION IN ORIGINAL STR
-    while (*str_ptr != *sub_ptr)
+    while (*str != *substr)
     {
-        str_ptr--;
+        str--;
         position--;
 
         // IF LAST CHAR NOT FOUND
@@ -300,40 +390,40 @@ int remove_last_substr(char *str, const char *substr)
     while (position > -1)
     {
         // IF CURRENT CHAR ARE DIFFERENT, POINT BACK TO THE END OF SUB AND START FROM THERE WHERE STR IS
-        if (*sub_ptr != *str_ptr)
+        if (*substr != *str)
         {
 
-            if (str_ptr == char_one_str)
+            if (str == first_str_char)
             {
                 position = -1;
                 break;
             }
             else
             {
-                str_ptr--; // POINTING STR TO THE PREVIOUS CHAR
+                str--; // POINTING STR TO THE PREVIOUS CHAR
 
                 // POINT BACK TO THE END OF SUB
-                while (*sub_ptr != '\0')
-                    sub_ptr++;
+                while (*substr != '\0')
+                    substr++;
 
                 // POINTING IT BACK TO THE LAST CHAR FROM '\0'
-                sub_ptr--;
+                substr--;
             }
-            
         }
 
         else
         {
             // IF SUBSTR IS FINISHED
-            if (sub_ptr == char_one_sub) {
-                position = str_ptr - char_one_str;
+            if (substr == first_sub_char)
+            {
+                position = str - first_str_char;
                 break;
             }
             else
             {
                 // MOVE POINTERS BACKWARD
-                sub_ptr--;
-                str_ptr--;
+                substr--;
+                str--;
             }
         }
     }
@@ -342,35 +432,53 @@ int remove_last_substr(char *str, const char *substr)
     if (position != -1)
     {
         // START FROM CURRENT POSITION, PUTTING REMAINING LETTERS APART FROM SUBSTR
-        while (*str_ptr != '\0')
+        while (*str != '\0')
         {
-            *str_ptr = *(str_ptr + sub_len);
-            str_ptr++;
+            *str = *(str + sub_len);
+            str++;
         }
 
-        *str_ptr = '\0'; // TERMINATING THE STRING
+        *str = '\0'; // TERMINATING THE NEW STRING
     }
 
     return position;
 }
 
-bool test_remove_last_substr_once(char *str, const char *substr, char *expecStr, int expecPos)
+/*
+ * Tests the remove_last_substr function, for one test case
+ *
+ * Parameters:
+ *   str                The string to pass to remove_last_substr function to be reversed.
+ *   sub_str            The sub-string to remove from the string.
+ *   expected_str       The expected string result after removing the sub-string.
+ *   expected_position  The expected position where the sub-string was removed.
+ *
+ * Returns:
+ *   true if the test passes, false otherwise.
+ */
+bool test_remove_last_substr_once(char *str, const char *sub_str, char *expected_str, int expected_position)
 {
-    char buffer[512];
-    strcpy(buffer, str);
+    char temp[512];
+    strcpy(temp, str);
 
-    int position = remove_last_substr(buffer, substr);
+    int position = remove_last_substr(temp, sub_str);
 
-    if (strcmp(buffer, expecStr) != 0 || position != expecPos)
+    if (strcmp(temp, expected_str) != 0 || position != expected_position)
     {
         printf("\nTest error: removing '%s', from '%s', gives '%s', expected '%s' to be removed at position '%d' instead removed at '%d\n",
-               substr, str, buffer, expecStr, expecPos, position);
+               sub_str, str, temp, expected_str, expected_position, position);
         return false;
     }
     else
         return true;
 }
 
+/*
+ * Performs unit tests of the remove_last_substr function by running test_remove_last_substr_once on each test case.
+ *
+ * Returns:
+ *   true if all tests succeed, false otherwise.
+ */
 bool test_remove_last_substr()
 {
     bool success = true;
@@ -407,20 +515,27 @@ bool test_remove_last_substr()
     return success;
 }
 
+/*
+ * Removes all occurrences of any of the characters in remove_chars from str, modifying the result in place.
+ *
+ * Parameters:
+ *   str            A null terminated string for which characters will be removed.
+ *   remove_chars   A null terminated string containing characters to remove from str.
+ *
+ * Returns:
+ *   None
+ */
 void strip_chars(char *str, const char *remove_chars)
 {
-    char *str_ptr = str;               // POINTING TO THE FIRST CHAR OF STR
-    const char *rm_ptr = remove_chars; // POINTING TO THE FIRST CHAR OF SUBSTR
+    // POINTING TO THE FIRST CHAR OF STR
+    char *str_ptr = str;
 
-    while (*rm_ptr != '\0')
+    while (*remove_chars != '\0')
     {
-        // printf("at %c\n", *rm_ptr);
         while (*str_ptr != '\0')
         {
-            if (*str_ptr == *rm_ptr)
+            if (*str_ptr == *remove_chars)
             {
-                // printf("%c => %c\n", *str_ptr, *rm_ptr);
-
                 // REMOVE CHAR AND SHIFT THE REST
                 while (*str_ptr != '\0')
                 {
@@ -429,27 +544,36 @@ void strip_chars(char *str, const char *remove_chars)
                 }
 
                 str_ptr = str; // POINTING BACK TO FRONT
+            }
 
-                // printf("After removing: %s\n", str);
-            }
             else
-            {
                 str_ptr++;
-            }
         }
 
-        str_ptr = str; // POINTING BACK TO FRONT
-        rm_ptr++;
-    }
+        // POINTING BACK TO FRONT
+        str_ptr = str;
 
-    // printf("Final: %s\n", str);
+        // POINTING TO THE NEXT CHAR OF SUBSTR
+        remove_chars++;
+    }
 }
 
+/*
+ * Tests the strip_chars function, for one test case
+ *
+ * Parameters:
+ *   str            The string to pass to strip_chars function from which characters will be removed.
+ *   chars          The characters to remove from the string.
+ *   expected       The expected string result after removing the characters.
+ *
+ * Returns:
+ *   true if the test passes, false otherwise.
+ */
 bool test_strip_chars_once(char *str, char *chars, char *expected)
 {
     char temp[256];
 
-    strcpy(temp, str);      // SAVING str TO temp
+    strcpy(temp, str);        // SAVING str TO temp
     strip_chars(temp, chars); // STRIPING temp IN PLACE
 
     // CHECKING IF THE STRIPING IS CORRECT
@@ -463,6 +587,12 @@ bool test_strip_chars_once(char *str, char *chars, char *expected)
         return true;
 }
 
+/*
+ * Performs unit tests of the strip_chars function by running test_strip_chars_once on each test case.
+ *
+ * Returns:
+ *   true if all tests succeed, false otherwise.
+ */
 bool test_strip_chars()
 {
     bool result = true;
